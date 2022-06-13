@@ -1,6 +1,6 @@
 ﻿using MongoDB.Entities;
 
-namespace CringeLazer.Bancho._Features_.Auth.User.Me;
+namespace CringeLazer.Bancho._Features_.Api.Me;
 
 public static class Data
 {

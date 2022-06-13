@@ -32,7 +32,7 @@ public static class Data
                 FlagName = "BR",
                 FullName = "Fuckyou"
             },
-            Colour = "Red",
+            Colour = "#FFD800",
             AvatarUrl = "https://a.stanr.info/sadhjfbsjdfh",
             Cover = new Entities.User.UserCover
             {

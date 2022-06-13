@@ -3,8 +3,14 @@ using MongoDB.Entities;
 
 namespace CringeLazer.Bancho.Entities;
 
+[Collection("users")]
 public class User : IEntity
 {
+    public User()
+    {
+        this.InitOneToMany(() => Friends);
+    }
+
     [Field(@"username")]
     public string Username { get; set; }
 
@@ -13,6 +19,8 @@ public class User : IEntity
 
     [Field("Email")]
     public string Email { get; set; }
+
+    public Many<User> Friends { get; set; }
 
     #region Osu Data
     [Field(@"join_date")]
