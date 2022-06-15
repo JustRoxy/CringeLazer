@@ -1,10 +1,10 @@
-﻿using CringeLazer.Bancho.Data;
+﻿using CringeLazer.Bancho.Contracts;
+using CringeLazer.Bancho.Data;
 using Mapster;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using CringeLazer.Bancho.Contracts;
 
-namespace CringeLazer.Bancho._Features_.Api.Friends;
+namespace CringeLazer.Bancho._Features_.Api.GetFriends;
 
 public class Handler : IRequestHandler<Request, List<User>>
 {

@@ -2,7 +2,7 @@
 using Mapster;
 using MediatR;
 
-namespace CringeLazer.Bancho._Features_.Api.Friends;
+namespace CringeLazer.Bancho._Features_.Api.GetFriends;
 
 public class Endpoint : Endpoint<Request, List<User>>
 {
