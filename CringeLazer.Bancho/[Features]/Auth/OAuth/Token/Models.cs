@@ -1,6 +1,8 @@
-﻿namespace CringeLazer.Bancho._Features_.Auth.OAuth.Token;
+﻿using CringeLazer.Bancho.Helpers;
 
-public class Request
+namespace CringeLazer.Bancho._Features_.Auth.OAuth.Token;
+
+public class Request : IResultRequest<Response>
 {
     [BindFrom("username")]
     public string Username { get; set; } = null!;

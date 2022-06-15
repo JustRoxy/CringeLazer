@@ -1,4 +1,11 @@
-﻿namespace CringeLazer.Bancho._Features_.Api.SeasonalBackground;
+﻿using CringeLazer.Bancho.Helpers;
+
+namespace CringeLazer.Bancho._Features_.Api.SeasonalBackground;
+
+public class Request : IResultRequest<SeasonalBackgroundsResponse>
+{
+
+}
 
 public class SeasonalBackgroundsResponse
 {

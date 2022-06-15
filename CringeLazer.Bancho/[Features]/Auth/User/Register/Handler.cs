@@ -1,23 +1,29 @@
-﻿using CringeLazer.Bancho.Entities;
-using MongoDB.Entities;
+﻿using CringeLazer.Bancho.Data;
+using CringeLazer.Bancho.Domain;
+using CringeLazer.Bancho.Helpers;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace CringeLazer.Bancho._Features_.Auth.User.Register;
 
-public static class Data
+public class Handler : IRequestHandler<Request, Result<Response>>
 {
-    public static Task<bool> UserExists(Request req, CancellationToken ct)
+    private readonly CringeContext _context;
+
+    public Handler(CringeContext context)
     {
-        return DB.Find<Entities.User>()
-            .Match(x => x.Username == req.Username || x.Email == req.Email)
-            .ExecuteAnyAsync(ct);
+        _context = context;
     }
 
-    public static async Task AddUser(Request req, CancellationToken ct)
+    public async Task<bool> UserExists(Request req, CancellationToken ct)
     {
-        var id = await DB.NextSequentialNumberAsync<Entities.User>();
-        var user = new Entities.User
+        return await _context.Users.AnyAsync(x => x.Username == req.Username || x.Email == req.Email, ct);
+    }
+
+    public async Task AddUser(Request req, CancellationToken ct)
+    {
+        var user = new Domain.User
         {
-            ID = id.ToString(),
             Email = req.Email,
             Password = BCrypt.Net.BCrypt.EnhancedHashPassword(req.Password),
             Username = req.Username,
@@ -27,14 +33,14 @@ public static class Data
             {
                 "Vacman"
             },
-            Country = new Entities.User.CountryClass
+            Country = new Domain.User.CountryClass
             {
                 FlagName = "BR",
                 FullName = "Fuckyou"
             },
             Colour = "#FFD800",
             AvatarUrl = "https://a.stanr.info/sadhjfbsjdfh",
-            Cover = new Entities.User.UserCover
+            Cover = new Domain.User.UserCover
             {
                 CustomUrl = "https://a.stanr.info/sadhjfbsjdfh",
                 Id = 4,
@@ -83,7 +89,7 @@ public static class Data
                 "top_ranks",
                 "medals"
             },
-            Kudosu = new Entities.User.KudosuCount
+            Kudosu = new Domain.User.KudosuCount
             {
                 Available = 0,
                 Total = 0,
@@ -116,14 +122,21 @@ public static class Data
                     SSPlus = 0
                 }
             },
-            Badges = Array.Empty<Entities.User.Badge>(),
-            Achievements = Array.Empty<Entities.User.UserAchievement>(),
-            MonthlyPlayCounts = Array.Empty<Entities.User.UserHistoryCount>(),
-            ReplaysWatchedCounts = Array.Empty<Entities.User.UserHistoryCount>(),
             IsBot = false,
-            RulesetsStatistics = null
         };
 
-        await user.SaveAsync(cancellation: ct);
+        await _context.Users.AddAsync(user, ct);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<Result<Response>> Handle(Request request, CancellationToken cancellationToken)
+    {
+        if (await UserExists(request, cancellationToken))
+        {
+            return Result<Response>.Error("You're already registered", ErrorType.BadRequest);
+        }
+
+        await AddUser(request, cancellationToken);
+        return Result<Response>.Some(new Response());
     }
 }

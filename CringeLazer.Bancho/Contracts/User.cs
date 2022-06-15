@@ -5,7 +5,7 @@ namespace CringeLazer.Bancho.Contracts;
 public class User
 {
     [JsonPropertyName("id")]
-    public int ID { get; set; }
+    public int UserId { get; set; }
 
     [JsonPropertyName(@"join_date")]
     public DateTimeOffset JoinDate { get; set; }

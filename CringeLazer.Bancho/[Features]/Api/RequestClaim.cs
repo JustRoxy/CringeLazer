@@ -3,6 +3,6 @@
 public class RequestClaim
 {
     [FromClaim]
-    public string Id { get; set; } = null!;
+    public int Id { get; set; }
 }
 

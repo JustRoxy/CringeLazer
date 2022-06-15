@@ -1,7 +1,10 @@
-﻿namespace CringeLazer.Bancho._Features_.Auth.User.Register;
+﻿using MediatR;
+
+namespace CringeLazer.Bancho._Features_.Auth.User.Register;
 
 public class Endpoint : Endpoint<Request>
 {
+    public IMediator Mediator { get; set; }
     public override void Configure()
     {
         Post("/users");
@@ -11,12 +14,14 @@ public class Endpoint : Endpoint<Request>
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        if (await Data.UserExists(req, ct))
+        var result = await Mediator.Send(req, ct);
+        if (result.IsError)
         {
-            ThrowError("You're already registered");
-            return;
+            ThrowError(result.Errors[0].Message);
         }
-
-        await Data.AddUser(req, ct);
+        else
+        {
+            await SendOkAsync();
+        }
     }
 }
