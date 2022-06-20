@@ -126,7 +126,7 @@ public class Handler : IRequestHandler<Request, Result<Response>>
         };
 
         await _context.Users.AddAsync(user, ct);
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
     }
 
     public async Task<Result<Response>> Handle(Request request, CancellationToken cancellationToken)

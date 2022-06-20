@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace CringeLazer.Bancho.Domain.Chat;
 
 public class ChatChannel
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public ulong Id { get; set; }
+    public int Id { get; set; }
 
     public string Name { get; set; }
 
@@ -15,7 +16,7 @@ public class ChatChannel
 
     public ChannelType Type { get; set; }
 
-    public long LastMessageId => Messages.LastOrDefault()?.ChannelId ?? 0;
+    public int LastMessageId => Messages.LastOrDefault()?.ChannelId ?? 0;
 
     public bool Moderated { get; set; }
 
@@ -26,13 +27,11 @@ public class ChatChannel
     public List<ChatMessage> Messages { get; set; }
 }
 
+[Owned]
 public class CurrentUserAttributes
 {
-    public long Id { get; set; }
     public User User { get; set; }
     public int UserId { get; set; }
-    public ChatChannel Channel { get; set; }
-    public int ChannelId { get; set; }
     public bool CanMessage { get; set; }
     public string CanMessageError { get; set; }
     public long LastReadId { get; set; }

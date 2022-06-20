@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<Request, Result<User>>
     {
         return await _context.Users
             .ProjectToType<User>()
-            .FirstOrDefaultAsync(x => x.UserId == id, token);
+            .FirstOrDefaultAsync(x => x.Id == id, token);
     }
 
     public async Task<Result<User>> Handle(Request request, CancellationToken cancellationToken)

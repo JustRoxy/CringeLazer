@@ -18,7 +18,7 @@ public class Handler : IRequestHandler<Request, List<User>>
     public async Task<List<User>> GetFriends(int id, CancellationToken token)
     {
         return await _context.Users
-            .Where(x => x.UserId == id)
+            .Where(x => x.Id == id)
             .Select(x => x.Friends)
             .ProjectToType<List<User>>()
             .SelectMany(x => x)

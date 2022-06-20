@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace CringeLazer.Bancho.Domain;
 
+[Owned]
 public class UserStatistics
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
-
     public LevelInfo Level { get; set; }
 
     public bool IsRanked { get; set; }
@@ -35,19 +33,17 @@ public class UserStatistics
 
     public Grades GradesCount { get; set; }
 
+    [Owned]
     public class LevelInfo
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public int Current { get; set; }
 
         public int Progress { get; set; }
     }
 
+    [Owned]
     public class Grades
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public int? SSPlus { get; set; }
 
         public int SS { get; set; }

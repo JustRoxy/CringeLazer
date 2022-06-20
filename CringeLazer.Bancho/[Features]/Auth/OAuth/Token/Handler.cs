@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<Request, Result<Response>>
         return _context.Users.Select(x =>
             new Domain.User
             {
-                UserId = x.UserId,
+                Id = x.Id,
                 Password = x.Password,
                 Username = x.Username
             })
@@ -46,7 +46,7 @@ public class Handler : IRequestHandler<Request, Result<Response>>
         var token = JWTBearer.CreateToken(
             signingKey: _settings.Token.SigningKey,
             expireAt: DateTime.UtcNow.AddDays(1),
-            claims: new[] { ("Id", user.UserId.ToString()) },
+            claims: new[] { ("Id", user.Id.ToString()) },
             permissions: new[] { "OsuClient" });
 
         return Result<Response>.Some(new Response

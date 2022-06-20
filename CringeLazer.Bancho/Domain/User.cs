@@ -1,14 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using CringeLazer.Bancho.Domain.Chat;
+using Microsoft.EntityFrameworkCore;
 using ChatChannel = CringeLazer.Bancho.Domain.Chat.ChatChannel;
 
 namespace CringeLazer.Bancho.Domain;
 
 [Table("users")]
+[Index(nameof(Username), IsUnique = true)]
 public class User
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int UserId { get; set; }
+    public int Id { get; set; }
+
     public string Username { get; set; }
 
     public string Password { get; set; }
@@ -19,7 +22,7 @@ public class User
 
     public List<ChatChannel> Channels { get; set; }
 
-    public List<UserSilence> Silences { get;set; }
+    public List<UserSilence> Silences { get; set; }
 
     #region Osu Data
     public DateTime JoinDate { get; set; }
@@ -27,11 +30,13 @@ public class User
     public CountryClass Country { get; set; }
     public string Colour { get; set; }
     public string AvatarUrl { get; set; }
+
     public string CoverUrl
     {
         get => Cover?.Url;
         set => Cover = new UserCover { Url = value };
     }
+
     public UserCover Cover { get; set; }
     public bool IsAdmin { get; set; }
     public bool IsSupporter { get; set; }
@@ -78,14 +83,13 @@ public class User
 
     public StatisticsRankHistory RankHistory { get; set; }
     public List<Badge> Badges { get; set; }
-    public List<UserAchievement> Achievements { get; set; }
+    public List<UserAchievement> UserAchievements { get; set; }
     public List<UserHistoryCount> MonthlyPlayCounts { get; set; }
     public List<UserHistoryCount> ReplaysWatchedCounts { get; set; }
 
+    [Owned]
     public class CountryClass
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         /// <summary>
         ///     The name of this country.
         /// </summary>
@@ -97,54 +101,48 @@ public class User
         public string FlagName { get; set; }
     }
 
+    [Owned]
     public class UserCover
     {
+        public int Id { get; set; }
         public string CustomUrl { get; set; }
         public string Url { get; set; }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
     }
 
+    [Owned]
     public class KudosuCount
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public int Total { get; set; }
         public int Available { get; set; }
     }
 
+    [Owned]
     public class StatisticsRankHistory
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public string Mode { get; set; }
         public int[] Data { get; set; }
     }
 
+    [Owned]
     public class Badge
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public DateTime AwardedAt { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }
     }
 
+    [Owned]
     public class UserAchievement
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Id { get; set; }
+        public int AchievementId { get; set; }
         public DateTime AchievedAt { get; set; }
     }
 
+    [Owned]
     public class UserHistoryCount
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Id { get; set; }
         public DateTime Date { get; set; }
         public long Count { get; set; }
     }
-
     #endregion
 }

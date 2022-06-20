@@ -5,11 +5,11 @@ namespace CringeLazer.Bancho.Domain.Chat;
 public class ChatMessage
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public ulong Id { get; set; }
+    public int Id { get; set; }
 
     public ChatChannel Channel { get; set; }
 
-    public long ChannelId { get; set; }
+    public int ChannelId { get; set; }
 
     public bool IsAction { get; set; }
 
