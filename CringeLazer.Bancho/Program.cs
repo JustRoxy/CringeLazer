@@ -1,10 +1,12 @@
 global using FastEndpoints;
 global using FastEndpoints.Security;
+using System.Reflection;
 using System.Text.Json.Serialization;
 using CringeLazer.Bancho;
 using CringeLazer.Bancho.Data;
 using FastEndpoints.Swagger;
 using JorgeSerrano.Json;
+using Mapster;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,9 +21,11 @@ WebApplication Startup()
     builder.Services.AddSwaggerDoc();
     builder.Services.AddSignalR();
     builder.Services.AddMediatR(typeof(Program));
+    TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetEntryAssembly()!);
 
     builder.Services.AddDbContext<CringeContext>(x =>
     {
+        x.EnableSensitiveDataLogging();
         x.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"));
     });
 
