@@ -1,6 +1,19 @@
 version: '3.5'
 
 services:
+  bancho:
+    build: .
+    depends_on:
+      - mongodb
+    ports:
+      - "127.0.0.1:3001:3001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:3001
+      - ConnectionStrings__Mongo=mongodb://mongodb:mongodb@mongodb:27017
+      - Token__SigningKey=K5t2NhR5jw7CfF9eZwByuGLkSpKPYtxrT
+    volumes:
+      - ./logs:/app/logs
   mongodb:
     image: mongo:latest
     environment:
