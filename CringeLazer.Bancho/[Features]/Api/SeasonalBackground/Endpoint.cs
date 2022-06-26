@@ -4,7 +4,7 @@ public class Endpoint : EndpointWithoutRequest<SeasonalBackgroundsResponse>
 {
     public override void Configure()
     {
-        Get("/api/v2/seasonal-backgrounds");
+        Get("seasonal-backgrounds");
         AllowAnonymous();
     }
 

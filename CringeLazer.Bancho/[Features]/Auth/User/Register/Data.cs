@@ -20,6 +20,7 @@ public static class Data
             Email = req.Email,
             Password = BCrypt.Net.BCrypt.EnhancedHashPassword(req.Password),
             Username = req.Username,
+            JoinedChannels = new List<ulong>(),
 
             JoinDate = DateTime.UtcNow,
             PreviousUsernames = new[]
@@ -45,7 +46,7 @@ public static class Data
             IsGMT = false,
             IsQAT = false,
             IsBNG = false,
-            Active = true,
+            IsActive = true,
             IsOnline = true,
             PMFriendsOnly = false,
             Interests = null,

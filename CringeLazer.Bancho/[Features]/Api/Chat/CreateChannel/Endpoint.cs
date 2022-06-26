@@ -11,17 +11,25 @@ public class Endpoint : Endpoint<Request, Response>
 
     public override async Task HandleAsync(Request req, CancellationToken ct)
     {
-        var channel = await Data.GetChannel(req.Id, req.TargetId, ct);
-        if (channel is null)
+        if (req.NewChannel is not null)
         {
-            await SendOkAsync(new Response());
+            await Data.AddPublicChannel(req.NewChannel, req.Id, ct);
+            return;
         }
         else
         {
-            var map = channel.Adapt<Response>();
-            var recent = await Data.GetRecent(channel, ct);
-            map.RecentMessages = recent.Adapt<List<Response.Message>>();
-            await SendOkAsync(map);
+            var channel = await Data.GetChannel(req.Id, req.TargetId!.Value, ct);
+            if (channel is null)
+            {
+                await SendOkAsync(new Response());
+            }
+            else
+            {
+                var map = channel.Adapt<Response>();
+                var recent = await Data.GetRecent(channel, ct);
+                map.RecentMessages = recent.Adapt<List<Response.Message>>();
+                await SendOkAsync(map);
+            }
         }
     }
 }

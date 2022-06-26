@@ -1,24 +1,24 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace CringeLazer.Bancho.Contracts.Chat;
 
 public class ChatMessage
 {
-    [JsonProperty(@"message_id")]
+    [JsonPropertyName(@"message_id")]
     public ulong Id { get; set; }
 
-    [JsonProperty(@"channel_id")]
+    [JsonPropertyName(@"channel_id")]
     public ulong ChannelId { get; set; }
 
-    [JsonProperty(@"is_action")]
+    [JsonPropertyName(@"is_action")]
     public bool IsAction { get; set; }
 
-    [JsonProperty(@"timestamp")]
+    [JsonPropertyName(@"timestamp")]
     public DateTime Timestamp { get; set; }
 
-    [JsonProperty(@"content")]
+    [JsonPropertyName(@"content")]
     public string Content { get; set; }
 
-    [JsonProperty(@"sender")]
-    public UserCompact Sender { get; set; }
+    [JsonPropertyName(@"sender")]
+    public UserSender Sender { get; set; }
 }

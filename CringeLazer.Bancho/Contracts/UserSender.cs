@@ -1,6 +1,6 @@
 namespace CringeLazer.Bancho.Contracts;
 
-public class UserCompact
+public class UserSender
 {
     public ulong Id { get; set; }
     public string Username { get; set; }

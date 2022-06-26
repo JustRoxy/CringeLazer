@@ -7,7 +7,7 @@ public class Endpoint : Endpoint<RequestClaim, List<User>>
 {
     public override void Configure()
     {
-        Get("/api/v2/friends");
+        Get("friends");
     }
 
     public override async Task HandleAsync(RequestClaim req, CancellationToken ct)

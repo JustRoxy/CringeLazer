@@ -14,28 +14,40 @@ public class Endpoint : Endpoint<Request, Response>
         if (req.ChannelId is null)
         {
             var channels = await Data.GetUsersChannels(req.Id, ct);
-            var messagesTask = Data.GetMessages(channels, req.Since ?? 0);
-            var channelTask = Data.Presence(channels, req.Id);
+            if (channels is null || channels.Count == 0)
+            {
+                await SendNoContentAsync();
 
-            await SendOkAsync(new Response
+                return;
+            }
+            var messages = await Data.GetMessages(channels, req.Since ?? 0);
+            if (messages.Count == 0)
             {
-                Messages = await messagesTask,
-                Presence = await channelTask
-            });
-        }
-        else
-        {
-            if (!await ChatChannelData.UserContains(req.ChannelId.Value, req.Id))
-            {
-                ThrowError("You're not in the channel");
+                await SendNoContentAsync();
+
                 return;
             }
 
             await SendOkAsync(new Response
             {
-                Presence = new []{await ChatChannelData.GetChannel(req.ChannelId.Value, req.Id)},
-                Messages = await ChatChannelData.GetMessages(req.ChannelId.Value)
+                Messages = messages,
+                Presence = await Data.Presence(channels, req.Id)
             });
+
+            return;
         }
+
+        if (!await ChatChannelData.UserContains(req.ChannelId.Value, req.Id))
+        {
+            ThrowError("You're not in the channel");
+
+            return;
+        }
+
+        await SendOkAsync(new Response
+        {
+            Presence = new[] { await ChatChannelData.GetChannel(req.ChannelId.Value, req.Id) },
+            Messages = await ChatChannelData.GetMessages(req.ChannelId.Value)
+        });
     }
 }

@@ -9,6 +9,7 @@ public class Endpoint : Endpoint<Request, ChatMessage>
     public override void Configure()
     {
         Post("/chat/channels/{channel}/messages");
+        AllowFormData();
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)

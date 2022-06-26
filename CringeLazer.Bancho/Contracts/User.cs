@@ -28,6 +28,9 @@ public class User
     [JsonPropertyName(@"avatar_url")]
     public string AvatarUrl { get; set; }
 
+    [JsonPropertyName("default_group")]
+    public string DefaultGroup => "default";
+
     [JsonPropertyName(@"cover_url")]
     public string CoverUrl
     {
@@ -60,7 +63,7 @@ public class User
     public bool IsBot { get; set; }
 
     [JsonPropertyName(@"is_active")]
-    public bool Active { get; set; }
+    public bool IsActive { get; set; }
 
     [JsonPropertyName(@"is_online")]
     public bool IsOnline { get; set; }

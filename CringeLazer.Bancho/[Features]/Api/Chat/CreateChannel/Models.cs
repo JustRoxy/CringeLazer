@@ -5,7 +5,7 @@ namespace CringeLazer.Bancho._Features_.Api.Chat.CreateChannel;
 public class Request : RequestClaim
 {
     [BindFrom("channel")]
-    public Channel NewChannel { get; set; }
+    public Channel? NewChannel { get; set; }
 
     public class Channel
     {
@@ -20,10 +20,10 @@ public class Request : RequestClaim
     }
 
     [BindFrom("target_id")]
-    public ulong TargetId { get; set; }
+    public ulong? TargetId { get; set; }
 
     [BindFrom("target_ids")]
-    public List<ulong> TargetIds { get; set; }
+    public List<ulong>? TargetIds { get; set; }
 
     [BindFrom("type")]
     public string Type { get; set; }

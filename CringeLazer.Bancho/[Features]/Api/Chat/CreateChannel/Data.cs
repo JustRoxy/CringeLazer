@@ -1,5 +1,5 @@
+using CringeLazer.Bancho.Data;
 using CringeLazer.Bancho.Domain.Chat;
-using MongoDB.Driver;
 using MongoDB.Entities;
 
 namespace CringeLazer.Bancho._Features_.Api.Chat.CreateChannel;
@@ -21,5 +21,36 @@ public static class Data
             .Sort(x => x.Descending(v => v.Id))
             .Limit(50)
             .ExecuteAsync(token);
+    }
+
+    public static async Task AddPublicChannel(Request.Channel request, ulong claim, CancellationToken token)
+    {
+        var channelId = await DB.NextSequentialNumberAsync<ChatChannel>(token);
+        var message = new ChatMessage
+        {
+            ChannelId = channelId,
+            Content = request.Message,
+            Id = await DB.NextSequentialNumberAsync<ChatMessage>(token),
+            IsAction = false,
+            Sender = await UserData.GetSender(claim),
+            SenderId = claim,
+            Timestamp = DateTime.UtcNow
+        };
+
+        var channel = new ChatChannel
+        {
+            Description = request.Description,
+            Icon = null,
+            Id = channelId,
+            LastMessageId = message.Id,
+            LastReadIds = new Dictionary<string, ulong>(),
+            Moderated = false,
+            Name = request.Name,
+            Type = ChannelType.PUBLIC,
+            UserIds = new List<ulong>()
+        };
+
+        await message.SaveAsync(cancellation: token);
+        await channel.SaveAsync(cancellation: token);
     }
 }

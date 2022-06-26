@@ -7,6 +7,7 @@ public class Endpoint : Endpoint<Request>
         Post("/users");
         AllowFormData();
         AllowAnonymous();
+        RoutePrefixOverride("");
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)

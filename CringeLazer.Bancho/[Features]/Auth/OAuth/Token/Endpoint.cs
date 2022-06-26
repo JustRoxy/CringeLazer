@@ -11,6 +11,7 @@ public class Endpoint : Endpoint<Request, Response>
         Post("/oauth/token");
         AllowFormData();
         AllowAnonymous();
+        RoutePrefixOverride("");
     }
 
     public override async Task HandleAsync(Request req, CancellationToken ct)

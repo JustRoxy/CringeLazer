@@ -6,7 +6,7 @@ public class Endpoint : Endpoint<RequestClaim, Contracts.User>
 {
     public override void Configure()
     {
-        Get("/api/v2/me");
+        Get("me");
     }
 
     public override async Task HandleAsync(RequestClaim req, CancellationToken ct)
