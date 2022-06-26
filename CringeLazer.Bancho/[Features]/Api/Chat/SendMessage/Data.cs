@@ -28,6 +28,7 @@ public static class Data
 
         await DB.Update<ChatChannel>()
             .Match(x => x.Id == req.Channel)
+            .Modify(x => x.Set(v => v.LastMessageId, message.Id))
             .Modify(x => x.Set(v => v.LastReadIds[req.Id.ToString()], message.Id))
             .ExecuteAsync(token);
 
