@@ -21,7 +21,6 @@ public static class Data
         var messages = await DB.Find<Domain.Chat.ChatMessage>()
             .Match(x => channels.Contains(x.ChannelId))
             .Match(x => x.Id > since)
-            .Sort(x => x.Descending(v => v.Id))
             .Limit(50)
             .ExecuteAsync();
 
