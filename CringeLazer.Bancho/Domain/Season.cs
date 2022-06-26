@@ -1,19 +1,30 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Entities;
 
 namespace CringeLazer.Bancho.Domain;
 
-public class Season
+[Collection("seasons")]
+public class Season : IEntity
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
+    public ulong Id { get; set; }
     public DateTime EndsAt { get; set; }
 
     public List<SeasonalBackgrounds> Backgrounds { get; set; }
 
-    [Owned]
     public class SeasonalBackgrounds
     {
         public string Url { get; set; }
+    }
+
+    public string GenerateNewID()
+    {
+        throw new NotImplementedException();
+    }
+
+    [BsonId]
+    public string ID
+    {
+        get => Id.ToString();
+        set => Id = ulong.Parse(value);
     }
 }

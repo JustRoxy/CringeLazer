@@ -1,8 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿namespace CringeLazer.Bancho.Domain;
 
-namespace CringeLazer.Bancho.Domain;
-
-[Owned]
 public class UserStatistics
 {
     public LevelInfo Level { get; set; }
@@ -33,7 +30,6 @@ public class UserStatistics
 
     public Grades GradesCount { get; set; }
 
-    [Owned]
     public class LevelInfo
     {
         public int Current { get; set; }
@@ -41,7 +37,6 @@ public class UserStatistics
         public int Progress { get; set; }
     }
 
-    [Owned]
     public class Grades
     {
         public int? SSPlus { get; set; }

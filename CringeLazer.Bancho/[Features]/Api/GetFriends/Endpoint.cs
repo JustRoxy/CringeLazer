@@ -1,21 +1,18 @@
 ﻿using CringeLazer.Bancho.Contracts;
 using Mapster;
-using MediatR;
 
 namespace CringeLazer.Bancho._Features_.Api.GetFriends;
 
-public class Endpoint : Endpoint<Request, List<User>>
+public class Endpoint : Endpoint<RequestClaim, List<User>>
 {
-    public IMediator Mediator { get; set; }
     public override void Configure()
     {
         Get("/api/v2/friends");
     }
 
-    public override async Task HandleAsync(Request req, CancellationToken ct)
+    public override async Task HandleAsync(RequestClaim req, CancellationToken ct)
     {
-        var result = await Mediator.Send(req, ct);
-
+        var result = await Data.GetFriends(req.Id, ct);
         await SendOkAsync(result.Adapt<List<User>>());
     }
 }

@@ -3,6 +3,6 @@
 public class RequestClaim
 {
     [FromClaim]
-    public int Id { get; set; }
+    public ulong Id { get; set; }
 }
 

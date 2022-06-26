@@ -1,29 +1,22 @@
-﻿using CringeLazer.Bancho.Data;
-using CringeLazer.Bancho.Domain;
-using CringeLazer.Bancho.Helpers;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using CringeLazer.Bancho.Domain;
+using MongoDB.Entities;
 
 namespace CringeLazer.Bancho._Features_.Auth.User.Register;
 
-public class Handler : IRequestHandler<Request, Result<Response>>
+public static class Data
 {
-    private readonly CringeContext _context;
-
-    public Handler(CringeContext context)
+    public static async Task<bool> UserExists(Request req, CancellationToken ct)
     {
-        _context = context;
+        return await DB.Find<Domain.User>()
+            .Match(x => x.Username == req.Username || x.Email == req.Email)
+            .ExecuteAnyAsync(ct);
     }
 
-    public async Task<bool> UserExists(Request req, CancellationToken ct)
-    {
-        return await _context.Users.AnyAsync(x => x.Username == req.Username || x.Email == req.Email, ct);
-    }
-
-    public async Task AddUser(Request req, CancellationToken ct)
+    public static async Task AddUser(Request req, CancellationToken ct)
     {
         var user = new Domain.User
         {
+            Id = await DB.NextSequentialNumberAsync<Domain.User>(ct),
             Email = req.Email,
             Password = BCrypt.Net.BCrypt.EnhancedHashPassword(req.Password),
             Username = req.Username,
@@ -38,7 +31,7 @@ public class Handler : IRequestHandler<Request, Result<Response>>
                 FlagName = "BR",
                 FullName = "Fuckyou"
             },
-            Colour = "#FFD800",
+            ProfileColour = "#FFD800",
             AvatarUrl = "https://a.stanr.info/sadhjfbsjdfh",
             Cover = new Domain.User.UserCover
             {
@@ -122,21 +115,9 @@ public class Handler : IRequestHandler<Request, Result<Response>>
                     SSPlus = 0
                 }
             },
-            IsBot = false,
+            IsBot = false
         };
 
-        await _context.Users.AddAsync(user, ct);
-        await _context.SaveChangesAsync(ct);
-    }
-
-    public async Task<Result<Response>> Handle(Request request, CancellationToken cancellationToken)
-    {
-        if (await UserExists(request, cancellationToken))
-        {
-            return Result<Response>.Error("You're already registered", ErrorType.BadRequest);
-        }
-
-        await AddUser(request, cancellationToken);
-        return Result<Response>.Some(new Response());
+        await user.SaveAsync(cancellation: ct);
     }
 }

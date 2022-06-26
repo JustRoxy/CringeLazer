@@ -16,11 +16,14 @@ public class User
     [JsonPropertyName(@"previous_usernames")]
     public string[] PreviousUsernames { get; set; }
 
+    [JsonPropertyName("country_code")]
+    public string CountryCode { get; set; }
+
     [JsonPropertyName(@"country")]
     public CountryClass Country { get; set; }
 
     [JsonPropertyName(@"profile_colour")]
-    public string Colour { get; set; }
+    public string ProfileColour { get; set; }
 
     [JsonPropertyName(@"avatar_url")]
     public string AvatarUrl { get; set; }

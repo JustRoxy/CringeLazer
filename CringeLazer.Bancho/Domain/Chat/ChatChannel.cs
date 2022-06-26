@@ -1,12 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Entities;
 
 namespace CringeLazer.Bancho.Domain.Chat;
 
-public class ChatChannel
+[Collection("channels")]
+public class ChatChannel : IEntity
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
+    [BsonId]
+    public ulong Id { get; set; }
 
     public string Name { get; set; }
 
@@ -16,18 +17,24 @@ public class ChatChannel
 
     public ChannelType Type { get; set; }
 
-    public int LastMessageId => Messages.LastOrDefault()?.ChannelId ?? 0;
-
+    public Dictionary<string, ulong> LastReadIds { get; set; }
+    public ulong LastMessageId { get; set; }
     public bool Moderated { get; set; }
 
-    public List<User> Users { get; set; }
+    public List<ulong> UserIds { get; set; }
 
-    public List<CurrentUserAttributes> CurrentUserAttributes { get; set; }
+    public string GenerateNewID()
+    {
+        throw new NotImplementedException();
+    }
 
-    public List<ChatMessage> Messages { get; set; }
+    public string ID
+    {
+        get => Id.ToString();
+        set => Id = ulong.Parse(value);
+    }
 }
 
-[Owned]
 public class CurrentUserAttributes
 {
     public User User { get; set; }

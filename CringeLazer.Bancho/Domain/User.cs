@@ -1,16 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using CringeLazer.Bancho.Domain.Chat;
-using Microsoft.EntityFrameworkCore;
-using ChatChannel = CringeLazer.Bancho.Domain.Chat.ChatChannel;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Entities;
 
 namespace CringeLazer.Bancho.Domain;
 
-[Table("users")]
-[Index(nameof(Username), IsUnique = true)]
-public class User
+[Collection("users")]
+public class User : IEntity
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
+    public User()
+    {
+        this.InitOneToMany(() => Friends);
+    }
+
+    [BsonId]
+    public ulong Id { get; set; }
 
     public string Username { get; set; }
 
@@ -18,17 +20,18 @@ public class User
 
     public string Email { get; set; }
 
-    public List<User> Friends { get; set; }
-
-    public List<ChatChannel> Channels { get; set; }
-
-    public List<UserSilence> Silences { get; set; }
+    public List<ulong> JoinedChannels { get; set; }
+    public Many<User> Friends { get; set; }
 
     #region Osu Data
     public DateTime JoinDate { get; set; }
     public string[] PreviousUsernames { get; set; }
+
+    [Ignore]
+    public string CountryCode => Country.FlagName;
+
     public CountryClass Country { get; set; }
-    public string Colour { get; set; }
+    public string ProfileColour { get; set; }
     public string AvatarUrl { get; set; }
 
     public string CoverUrl
@@ -87,7 +90,6 @@ public class User
     public List<UserHistoryCount> MonthlyPlayCounts { get; set; }
     public List<UserHistoryCount> ReplaysWatchedCounts { get; set; }
 
-    [Owned]
     public class CountryClass
     {
         /// <summary>
@@ -101,7 +103,6 @@ public class User
         public string FlagName { get; set; }
     }
 
-    [Owned]
     public class UserCover
     {
         public int Id { get; set; }
@@ -109,21 +110,18 @@ public class User
         public string Url { get; set; }
     }
 
-    [Owned]
     public class KudosuCount
     {
         public int Total { get; set; }
         public int Available { get; set; }
     }
 
-    [Owned]
     public class StatisticsRankHistory
     {
         public string Mode { get; set; }
         public int[] Data { get; set; }
     }
 
-    [Owned]
     public class Badge
     {
         public DateTime AwardedAt { get; set; }
@@ -131,18 +129,23 @@ public class User
         public string ImageUrl { get; set; }
     }
 
-    [Owned]
     public class UserAchievement
     {
         public int AchievementId { get; set; }
         public DateTime AchievedAt { get; set; }
     }
 
-    [Owned]
     public class UserHistoryCount
     {
         public DateTime Date { get; set; }
         public long Count { get; set; }
     }
     #endregion
+
+    public string GenerateNewID()
+    {
+        throw new NotImplementedException();
+    }
+
+    public string ID { get => Id.ToString(); set => Id = ulong.Parse(value); }
 }

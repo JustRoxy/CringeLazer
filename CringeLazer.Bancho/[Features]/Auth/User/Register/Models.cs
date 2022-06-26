@@ -1,9 +1,8 @@
 ﻿using System.Text.Json.Serialization;
-using CringeLazer.Bancho.Helpers;
 
 namespace CringeLazer.Bancho._Features_.Auth.User.Register;
 
-public class Request : IResultRequest<Response>
+public class Request
 {
     [JsonPropertyName("user[username]")]
     [BindFrom("user[username]")]
@@ -18,6 +17,3 @@ public class Request : IResultRequest<Response>
     public string Email { get; set; } = null!;
 }
 
-public class Response
-{
-}

@@ -1,25 +1,23 @@
-﻿using MediatR;
+﻿using Mapster;
 
 namespace CringeLazer.Bancho._Features_.Api.Me;
 
-public class Endpoint : Endpoint<Request, Contracts.User>
+public class Endpoint : Endpoint<RequestClaim, Contracts.User>
 {
-    public IMediator Mediator { get; set; }
     public override void Configure()
     {
         Get("/api/v2/me");
     }
 
-    public override async Task HandleAsync(Request req, CancellationToken ct)
+    public override async Task HandleAsync(RequestClaim req, CancellationToken ct)
     {
-        var result = await Mediator.Send(req, ct);
-
-        if (!result.IsError)
+        var data = await Data.GetData(req.Id, ct);
+        if (data is null)
         {
-            await SendOkAsync(result.Value);
+            await SendUnauthorizedAsync();
             return;
         }
 
-        await SendUnauthorizedAsync();
+        await SendOkAsync(data.Adapt<Contracts.User>());
     }
 }

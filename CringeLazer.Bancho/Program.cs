@@ -3,14 +3,13 @@ global using FastEndpoints.Security;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using CringeLazer.Bancho;
-using CringeLazer.Bancho.Data;
 using FastEndpoints.Swagger;
 using JorgeSerrano.Json;
 using Mapster;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
+using MongoDB.Entities;
 
-WebApplication Startup()
+async Task<WebApplication> Startup()
 {
     var builder = WebApplication.CreateBuilder();
     var settings = builder.Configuration.Get<Settings>();
@@ -20,21 +19,15 @@ WebApplication Startup()
     builder.Services.AddAuthenticationJWTBearer(settings.Token.SigningKey); //add this
     builder.Services.AddSwaggerDoc();
     builder.Services.AddSignalR();
-    builder.Services.AddMediatR(typeof(Program));
     TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetEntryAssembly()!);
-
-    builder.Services.AddDbContext<CringeContext>(x =>
-    {
-        x.EnableSensitiveDataLogging();
-        x.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"));
-    });
-
+    await DB.InitAsync("cringelazer",
+        MongoClientSettings.FromConnectionString(builder.Configuration.GetConnectionString("Mongo")));
 
     return builder.Build();
 }
 
 
-var app = Startup();
+var app = await Startup();
 
 app.UseAuthentication();
 
@@ -50,12 +43,5 @@ app.UseFastEndpoints(c =>
 
 app.UseOpenApi();
 app.UseSwaggerUi3(s => s.ConfigureDefaults());
-
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<CringeContext>();
-    context.Database.EnsureCreated();
-}
 
 app.Run();
