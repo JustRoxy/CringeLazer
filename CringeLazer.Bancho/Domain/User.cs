@@ -6,6 +6,13 @@ namespace CringeLazer.Bancho.Domain;
 [Collection("users")]
 public class User : IEntity
 {
+    static User()
+    {
+        DB.Index<User>()
+            .Key(x => x.Username, KeyType.Ascending)
+            .Option(x => x.Unique = true)
+            .CreateAsync();
+    }
     public User()
     {
         this.InitOneToMany(() => Friends);

@@ -44,6 +44,17 @@ app.UseFastEndpoints(c =>
     {
         s.Prefix = "api/v2";
     };
+    c.ErrorResponseBuilder = (failures, statusCode) =>
+    {
+        var failure = failures.First();
+
+        return new
+        {
+            error = $"{failure.Severity}.{failure.ErrorCode}",
+            error_description = failure.ErrorMessage,
+            hint = failure.ErrorMessage, message = failure.ErrorMessage
+        };
+    };
     c.SerializerOptions = s =>
     {
         s.Converters.Add(new JsonStringEnumConverter(new JsonSnakeCaseNamingPolicy()));

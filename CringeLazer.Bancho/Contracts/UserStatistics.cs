@@ -4,6 +4,9 @@ namespace CringeLazer.Bancho.Contracts;
 
 public class UserStatistics
 {
+    [JsonPropertyName("user")]
+    public UserCompact User { get; set; }
+
     [JsonPropertyName(@"level")]
     public LevelInfo Level { get; set; }
 
