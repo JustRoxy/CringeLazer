@@ -1,2 +1,1 @@
-# CringeLazer
- worst bancho lazer clone 
+![oh no cringe lazer](https://i.imgur.com/Vz46fPW.png)
