@@ -85,11 +85,8 @@ public class User : IEntity
     [Field("IsBot")]
     public bool IsBot { get; set; }
 
-    [Field("IsActive")]
-    public bool IsActive { get; set; }
-
-    [Field("IsOnline")]
-    public bool IsOnline { get; set; }
+    public bool IsActive => LastVisit?.AddDays(60) > DateTime.UtcNow;
+    public bool IsOnline => LastVisit?.AddMinutes(5) > DateTime.UtcNow;
 
     [Field("PMFriendsOnly")]
     public bool PMFriendsOnly { get; set; }

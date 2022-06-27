@@ -46,8 +46,6 @@ public static class Data
             IsGMT = false,
             IsQAT = false,
             IsBNG = false,
-            IsActive = true,
-            IsOnline = true,
             PMFriendsOnly = false,
             Interests = null,
             Occupation = null,

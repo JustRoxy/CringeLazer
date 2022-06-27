@@ -19,7 +19,7 @@ public static class UserData
                 IsActive = x.IsActive,
                 IsBot = x.IsBot,
                 IsOnline = x.IsOnline,
-                IsSupporter = x.IsSupporter,
+                IsSupporter = x.IsSupporter
             })
             .ExecuteSingleAsync();
     }

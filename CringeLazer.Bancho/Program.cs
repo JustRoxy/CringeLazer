@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using CringeLazer.Bancho;
 using CringeLazer.Bancho._Features_.Multiplayer;
 using CringeLazer.Bancho._Features_.Spectator;
+using CringeLazer.Bancho.Middleware;
 using FastEndpoints.Swagger;
 using JorgeSerrano.Json;
 using Mapster;
@@ -21,6 +22,7 @@ async Task<WebApplication> Startup()
     builder.Services.AddAuthenticationJWTBearer(settings.Token.SigningKey); //add this
     builder.Services.AddSwaggerDoc();
     builder.Services.AddSignalR().AddMessagePackProtocol();
+    builder.Services.AddScoped<LastVisitMiddleware>();
     TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetEntryAssembly()!);
     await DB.InitAsync("cringelazer",
         MongoClientSettings.FromConnectionString(builder.Configuration.GetConnectionString("Mongo")));
@@ -38,6 +40,7 @@ app.UseAuthorization();
 app.MapHub<SpectatorHub>("/spectator");
 app.MapHub<MultiplayerHub>("/multiplayer");
 
+app.UseMiddleware<LastVisitMiddleware>();
 app.UseFastEndpoints(c =>
 {
     c.RoutingOptions = s =>
