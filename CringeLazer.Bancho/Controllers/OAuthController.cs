@@ -1,9 +1,9 @@
-using CringeLazer.Bancho.Contracts;
 using CringeLazer.Bancho.Contracts.Requests;
 using CringeLazer.Bancho.Extensions;
-using CringeLazer.Core;
+using CringeLazer.Core.Exceptions;
 using CringeLazer.Core.Models;
 using CringeLazer.Core.Services;
+using LanguageExt.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CringeLazer.Bancho.Controllers;
@@ -26,7 +26,8 @@ public class OAuthController : ControllerBase
         {
             "password" => await _authorization.Access(request.Username, request.Password),
             "refresh_token" => await _authorization.Refresh(request.RefreshToken),
-            _ => new Result<OAuthToken>("Unsupported grant_type", 415)
+            _ => new Result<OAuthToken>(new StatusCodeException("Unsupported grant_type",
+                StatusCodes.Status415UnsupportedMediaType))
         };
 
         return result.ToResult();

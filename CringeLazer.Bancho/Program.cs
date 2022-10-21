@@ -17,7 +17,7 @@ var connectionString = builder.Configuration.GetConnectionString("Database");
 builder.Services.Configure<Settings>(builder.Configuration.GetSection("Settings"));
 builder.Services.AddDbContext<CringeContext>(
     o => o.UseNpgsql(connectionString,
-    op => op.MigrationsAssembly(typeof(Program).Assembly.FullName)));
+        op => op.MigrationsAssembly(typeof(Program).Assembly.FullName)));
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));
 
 builder.Services.AddTransient<IAuthorizationService, AuthorizationService>();

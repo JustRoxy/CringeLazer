@@ -13,7 +13,6 @@ public class CringeContext : DbContext
 
     private void MapUserModel(ModelBuilder modelBuilder)
     {
-
         modelBuilder.UseSerialColumns();
 
         var user = modelBuilder.Entity<UserModel>();

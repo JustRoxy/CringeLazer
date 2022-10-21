@@ -1,4 +1,5 @@
 using CringeLazer.Core.Models;
+using LanguageExt.Common;
 
 namespace CringeLazer.Core.Services;
 

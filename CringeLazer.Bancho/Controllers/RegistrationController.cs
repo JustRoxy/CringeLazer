@@ -27,16 +27,20 @@ public class RegistrationController : ControllerBase
         if (validationResult.IsValid)
         {
             var result = await _userService.Create(request.Username, request.Email, request.Password);
+
             return result.ToResult();
         }
 
-        return BadRequest(new RegistrationErrorResponse()
+        return BadRequest(new RegistrationErrorResponse
         {
-            FormErrors = new RegistrationErrors()
+            FormErrors = new RegistrationErrors
             {
-                Username = validationResult.Errors.Where(x => x.PropertyName == "Username").Select(x => x.ErrorMessage).ToArray(),
-                Email = validationResult.Errors.Where(x => x.PropertyName == "Email").Select(x => x.ErrorMessage).ToArray(),
-                Password = validationResult.Errors.Where(x => x.PropertyName == "Password").Select(x => x.ErrorMessage).ToArray()
+                Username = validationResult.Errors.Where(x => x.PropertyName == "Username").Select(x => x.ErrorMessage)
+                    .ToArray(),
+                Email = validationResult.Errors.Where(x => x.PropertyName == "Email").Select(x => x.ErrorMessage)
+                    .ToArray(),
+                Password = validationResult.Errors.Where(x => x.PropertyName == "Password").Select(x => x.ErrorMessage)
+                    .ToArray()
             }
         });
     }

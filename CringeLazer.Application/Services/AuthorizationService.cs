@@ -3,10 +3,11 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using CringeLazer.Application.Database;
-using CringeLazer.Core;
+using CringeLazer.Core.Exceptions;
 using CringeLazer.Core.Models;
 using CringeLazer.Core.Services;
 using CringeLazer.Core.Settings;
+using LanguageExt.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -35,36 +36,31 @@ public class AuthorizationService : IAuthorizationService
         }).FirstOrDefaultAsync(x => x.Username == username);
 
         if (user is null)
-        {
-            return new Result<OAuthToken>("User not found", 404);
-        }
+            return new Result<OAuthToken>(new StatusCodeException("User not found", 404));
 
         if (!BCrypt.Net.BCrypt.EnhancedVerify(password, user.Password))
-        {
-            return new Result<OAuthToken>("Incorrect username or password", 401);
-        }
+            return new Result<OAuthToken>(new StatusCodeException("Incorrect username or password", 401));
 
         var tokens = GenerateToken(user.UserId);
         user.RefreshToken = tokens.RefreshToken;
         await _context.SaveChangesAsync();
 
-        return new Result<OAuthToken>(tokens);
+        return tokens;
     }
 
     public async Task<Result<OAuthToken>> Refresh(string token)
     {
         var user = await _context.Users.Where(x => x.RefreshToken == token)
-            .Select(x => new UserModel {UserId = x.UserId}).FirstOrDefaultAsync();
+            .Select(x => new UserModel { UserId = x.UserId }).FirstOrDefaultAsync();
+
         if (user is null)
-        {
-            return new Result<OAuthToken>("User with this refresh-token is not found", 404);
-        }
+            return new Result<OAuthToken>(new StatusCodeException("User with this refresh-token is not found", 404));
 
         var tokens = GenerateToken(user.UserId);
         user.RefreshToken = tokens.RefreshToken;
         await _context.SaveChangesAsync();
 
-        return new Result<OAuthToken>(tokens);
+        return tokens;
     }
 
     private OAuthToken GenerateToken(long userId)

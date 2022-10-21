@@ -1,5 +1,6 @@
 using CringeLazer.Bancho.Contracts;
-using CringeLazer.Core;
+using CringeLazer.Core.Exceptions;
+using LanguageExt.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CringeLazer.Bancho.Extensions;
@@ -8,14 +9,25 @@ public static class ResultExtensions
 {
     public static IActionResult ToResult<T>(this Result<T> result)
     {
-        if (!result.IsError)
-        {
-            return new OkObjectResult(result.Value);
-        }
+        return result.Match(
+            x => new OkObjectResult(x),
+            x =>
+            {
+                var statusCode = 500;
+                if (x is StatusCodeException sce)
+                {
+                    statusCode = sce.StatusCode;
+                }
 
-        return new ObjectResult(new GenericErrorResponse
-        {
-            Error = result.Message
-        });
+                var error = new GenericErrorResponse
+                {
+                    Error = x.Message
+                };
+
+                return new ObjectResult(error)
+                {
+                    StatusCode = statusCode
+                };
+            });
     }
 }

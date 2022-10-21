@@ -1,7 +1,7 @@
 using CringeLazer.Application.Database;
-using CringeLazer.Core;
 using CringeLazer.Core.Models;
 using CringeLazer.Core.Services;
+using LanguageExt.Common;
 
 namespace CringeLazer.Application.Services;
 
@@ -26,6 +26,6 @@ public class UserService : IUserService
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        return new Result<UserModel>(user);
+        return user;
     }
 }
