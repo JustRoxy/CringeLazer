@@ -5,6 +5,7 @@ using System.Text;
 using CringeLazer.Application.Database;
 using CringeLazer.Core.Exceptions;
 using CringeLazer.Core.Models;
+using CringeLazer.Core.Models.Users;
 using CringeLazer.Core.Services;
 using CringeLazer.Core.Settings;
 using LanguageExt.Common;

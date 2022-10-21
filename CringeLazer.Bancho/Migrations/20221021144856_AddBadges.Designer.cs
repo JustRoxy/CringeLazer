@@ -5,6 +5,7 @@ using CringeLazer.Application.Database;
 using CringeLazer.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -13,9 +14,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CringeLazer.Bancho.Migrations
 {
     [DbContext(typeof(CringeContext))]
-    partial class CringeContextModelSnapshot : ModelSnapshot
+    [Migration("20221021144856_AddBadges")]
+    partial class AddBadges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -319,37 +321,6 @@ namespace CringeLazer.Bancho.Migrations
 
             modelBuilder.Entity("CringeLazer.Core.Models.Users.UserModel", b =>
                 {
-                    b.OwnsMany("CringeLazer.Core.Models.Users.Achievement", "Achievements", b1 =>
-                        {
-                            b1.Property<long>("AchievementAwardId")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("bigint")
-                                .HasColumnName("achievement_award_id");
-
-                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<long>("AchievementAwardId"));
-
-                            b1.Property<DateTime>("AchievedAt")
-                                .HasColumnType("timestamp with time zone")
-                                .HasColumnName("achieved_at");
-
-                            b1.Property<int>("AchievementId")
-                                .HasColumnType("integer")
-                                .HasColumnName("achievement_id");
-
-                            b1.Property<long>("UserId")
-                                .HasColumnType("bigint")
-                                .HasColumnName("user_id");
-
-                            b1.HasKey("AchievementAwardId");
-
-                            b1.HasIndex("UserId");
-
-                            b1.ToTable("achievement", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserId");
-                        });
-
                     b.OwnsMany("CringeLazer.Core.Models.Users.Badge", "Badges", b1 =>
                         {
                             b1.Property<long>("BadgeId")
@@ -407,8 +378,6 @@ namespace CringeLazer.Bancho.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("UserModelUserId");
                         });
-
-                    b.Navigation("Achievements");
 
                     b.Navigation("Badges");
 

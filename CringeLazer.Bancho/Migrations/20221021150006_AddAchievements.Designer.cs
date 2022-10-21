@@ -5,6 +5,7 @@ using CringeLazer.Application.Database;
 using CringeLazer.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -13,9 +14,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CringeLazer.Bancho.Migrations
 {
     [DbContext(typeof(CringeContext))]
-    partial class CringeContextModelSnapshot : ModelSnapshot
+    [Migration("20221021150006_AddAchievements")]
+    partial class AddAchievements
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

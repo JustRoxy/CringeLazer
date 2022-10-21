@@ -1,4 +1,4 @@
-namespace CringeLazer.Core.Models;
+namespace CringeLazer.Core.Models.Users;
 
 public class Kudosu
 {

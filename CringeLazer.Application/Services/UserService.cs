@@ -2,6 +2,7 @@ using CringeLazer.Application.Database;
 using CringeLazer.Core.Enums;
 using CringeLazer.Core.Models;
 using CringeLazer.Core.Models.Statistics;
+using CringeLazer.Core.Models.Users;
 using CringeLazer.Core.Services;
 using LanguageExt.Common;
 

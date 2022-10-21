@@ -1,4 +1,5 @@
 using CringeLazer.Core.Enums;
+using CringeLazer.Core.Models.Users;
 
 namespace CringeLazer.Core.Models.Statistics;
 

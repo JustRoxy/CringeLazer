@@ -1,3 +1,5 @@
+using CringeLazer.Core.Models.Users;
+
 namespace CringeLazer.Core.Models;
 
 public class SessionModel

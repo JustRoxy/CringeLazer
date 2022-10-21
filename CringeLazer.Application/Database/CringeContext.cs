@@ -2,6 +2,7 @@ using System.Resources;
 using CringeLazer.Core.Enums;
 using CringeLazer.Core.Models;
 using CringeLazer.Core.Models.Statistics;
+using CringeLazer.Core.Models.Users;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -105,6 +106,32 @@ public class CringeContext : DbContext
         {
             builder.Property(x => x.Available).HasColumnName("kudosu_available");
             builder.Property(x => x.Total).HasColumnName("kudosu_total");
+        });
+
+        user.OwnsMany(x => x.Badges, builder =>
+        {
+            builder.ToTable("badge");
+
+            builder.HasKey(x => x.BadgeId);
+            builder.WithOwner().HasForeignKey(x => x.UserId);
+
+            builder.Property(x => x.BadgeId).IsRequired().UseIdentityColumn().HasColumnName("badge_id");
+            builder.Property(x => x.UserId).IsRequired().HasColumnName("user_id");
+            builder.Property(x => x.Description).IsRequired().HasColumnName("description");
+            builder.Property(x => x.AwardedAt).IsRequired().HasColumnName("awarded_at");
+            builder.Property(x => x.ImageUrl).IsRequired().HasColumnName("image_url");
+        });
+
+        user.OwnsMany(x => x.Achievements, builder =>
+        {
+            builder.ToTable("achievement");
+            builder.WithOwner().HasForeignKey(x => x.UserId);
+            builder.HasKey(x => x.AchievementAwardId);
+
+            builder.Property(x => x.AchievementAwardId).UseIdentityColumn().HasColumnName("achievement_award_id");
+            builder.Property(x => x.UserId).IsRequired().HasColumnName("user_id");
+            builder.Property(x => x.AchievementId).IsRequired().HasColumnName("achievement_id");
+            builder.Property(x => x.AchievedAt).IsRequired().HasColumnName("achieved_at");
         });
 
         user.Property(x => x.UserId).UseIdentityColumn().IsRequired().HasColumnName("user_id");

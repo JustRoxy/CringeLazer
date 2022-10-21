@@ -1,7 +1,7 @@
 using CringeLazer.Core.Enums;
 using CringeLazer.Core.Models.Statistics;
 
-namespace CringeLazer.Core.Models;
+namespace CringeLazer.Core.Models.Users;
 
 public class UserModel
 {
@@ -42,4 +42,8 @@ public class UserModel
     #endregion
 
     public Kudosu Kudosu { get; set; }
+    public ICollection<Badge> Badges { get; set; }
+
+    public ICollection<Achievement> Achievements { get; set; }
+
 }
