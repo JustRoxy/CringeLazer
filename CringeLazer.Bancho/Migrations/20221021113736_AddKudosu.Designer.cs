@@ -5,6 +5,7 @@ using CringeLazer.Application.Database;
 using CringeLazer.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -13,9 +14,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CringeLazer.Bancho.Migrations
 {
     [DbContext(typeof(CringeContext))]
-    partial class CringeContextModelSnapshot : ModelSnapshot
+    [Migration("20221021113736_AddKudosu")]
+    partial class AddKudosu
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,7 +25,6 @@ namespace CringeLazer.Bancho.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "countries", new[] { "unknown", "bd", "be", "bf", "bg", "ba", "bb", "wf", "bl", "bm", "bn", "bo", "bh", "bi", "bj", "bt", "jm", "bv", "bw", "ws", "bq", "br", "bs", "je", "by", "bz", "ru", "rw", "rs", "tl", "re", "tm", "tj", "ro", "tk", "gw", "gu", "gt", "gs", "gr", "gq", "gp", "jp", "gy", "gg", "gf", "ge", "gd", "gb", "ga", "sv", "gn", "gm", "gl", "gi", "gh", "om", "tn", "jo", "hr", "ht", "hu", "hk", "hn", "hm", "ve", "pr", "ps", "pw", "pt", "sj", "py", "iq", "pa", "pf", "pg", "pe", "pk", "ph", "pn", "pl", "pm", "zm", "eh", "ee", "eg", "za", "ec", "it", "vn", "sb", "et", "so", "zw", "sa", "es", "er", "me", "md", "mg", "mf", "ma", "mc", "uz", "mm", "ml", "mo", "mn", "mh", "mk", "mu", "mt", "mw", "mv", "mq", "mp", "ms", "mr", "im", "ug", "tz", "my", "mx", "il", "fr", "io", "sh", "fi", "fj", "fk", "fm", "fo", "ni", "nl", "no", "na", "vu", "nc", "ne", "nf", "ng", "nz", "np", "nr", "nu", "ck", "xk", "ci", "ch", "co", "cn", "cm", "cl", "cc", "ca", "cg", "cf", "cd", "cz", "cy", "cx", "cr", "cw", "cv", "cu", "sz", "sy", "sx", "kg", "ke", "ss", "sr", "ki", "kh", "kn", "km", "st", "sk", "kr", "si", "kp", "kw", "sn", "sm", "sl", "sc", "kz", "ky", "sg", "se", "sd", "do", "dm", "dj", "dk", "vg", "de", "ye", "dz", "us", "uy", "yt", "um", "lb", "lc", "la", "tv", "tw", "tt", "tr", "lk", "li", "lv", "to", "lt", "lu", "lr", "ls", "th", "tf", "tg", "td", "tc", "ly", "va", "vc", "ae", "ad", "ag", "af", "ai", "vi", "is", "ir", "am", "al", "ao", "aq", "as", "ar", "au", "at", "aw", "in", "ax", "az", "ie", "id", "ua", "qa", "mz" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "gamemode", new[] { "osu", "mania", "taiko", "fruits" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("CringeLazer.Core.Models.SessionModel", b =>
@@ -52,73 +53,6 @@ namespace CringeLazer.Bancho.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("session", (string)null);
-                });
-
-            modelBuilder.Entity("CringeLazer.Core.Models.Statistics.StatisticsModel", b =>
-                {
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("user_id");
-
-                    b.Property<Gamemode>("Gamemode")
-                        .HasColumnType("gamemode")
-                        .HasColumnName("gamemode");
-
-                    b.Property<double>("Accuracy")
-                        .HasColumnType("double precision")
-                        .HasColumnName("accuracy");
-
-                    b.Property<int?>("CountryRank")
-                        .HasColumnType("integer")
-                        .HasColumnName("country_rank");
-
-                    b.Property<int?>("GlobalRank")
-                        .HasColumnType("integer")
-                        .HasColumnName("global_rank");
-
-                    b.Property<bool>("IsRanked")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_ranked");
-
-                    b.Property<int>("MaxCombo")
-                        .HasColumnType("integer")
-                        .HasColumnName("max_combo");
-
-                    b.Property<decimal?>("PP")
-                        .HasColumnType("numeric")
-                        .HasColumnName("pp");
-
-                    b.Property<int>("PlayCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("playcount");
-
-                    b.Property<int?>("PlayTime")
-                        .HasColumnType("integer")
-                        .HasColumnName("playtime");
-
-                    b.Property<List<int>>("RankHistory")
-                        .HasColumnType("integer[]")
-                        .HasColumnName("rank_history");
-
-                    b.Property<long>("RankedScore")
-                        .HasColumnType("bigint")
-                        .HasColumnName("ranked_score");
-
-                    b.Property<int>("ReplaysWatched")
-                        .HasColumnType("integer")
-                        .HasColumnName("replays_watched");
-
-                    b.Property<int>("TotalHits")
-                        .HasColumnType("integer")
-                        .HasColumnName("total_hits");
-
-                    b.Property<long>("TotalScore")
-                        .HasColumnType("bigint")
-                        .HasColumnName("total_score");
-
-                    b.HasKey("UserId", "Gamemode");
-
-                    b.ToTable("statistic", (string)null);
                 });
 
             modelBuilder.Entity("CringeLazer.Core.Models.UserModel", b =>
@@ -242,84 +176,9 @@ namespace CringeLazer.Bancho.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CringeLazer.Core.Models.Statistics.StatisticsModel", b =>
-                {
-                    b.HasOne("CringeLazer.Core.Models.UserModel", "User")
-                        .WithMany("Statistics")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsOne("CringeLazer.Core.Models.Statistics.Grades", "Grades", b1 =>
-                        {
-                            b1.Property<long>("StatisticsModelUserId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<Gamemode>("StatisticsModelGamemode")
-                                .HasColumnType("gamemode");
-
-                            b1.Property<int>("A")
-                                .HasColumnType("integer")
-                                .HasColumnName("grades_a");
-
-                            b1.Property<int>("S")
-                                .HasColumnType("integer")
-                                .HasColumnName("grades_s");
-
-                            b1.Property<int>("SPlus")
-                                .HasColumnType("integer")
-                                .HasColumnName("grades_splus");
-
-                            b1.Property<int>("SS")
-                                .HasColumnType("integer")
-                                .HasColumnName("grades_ss");
-
-                            b1.Property<int>("SSPlus")
-                                .HasColumnType("integer")
-                                .HasColumnName("grades_ssplus");
-
-                            b1.HasKey("StatisticsModelUserId", "StatisticsModelGamemode");
-
-                            b1.ToTable("statistic");
-
-                            b1.WithOwner()
-                                .HasForeignKey("StatisticsModelUserId", "StatisticsModelGamemode");
-                        });
-
-                    b.OwnsOne("CringeLazer.Core.Models.Statistics.LevelInfo", "Level", b1 =>
-                        {
-                            b1.Property<long>("StatisticsModelUserId")
-                                .HasColumnType("bigint");
-
-                            b1.Property<Gamemode>("StatisticsModelGamemode")
-                                .HasColumnType("gamemode");
-
-                            b1.Property<int>("Current")
-                                .HasColumnType("integer")
-                                .HasColumnName("level_current");
-
-                            b1.Property<int>("Progress")
-                                .HasColumnType("integer")
-                                .HasColumnName("level_progress");
-
-                            b1.HasKey("StatisticsModelUserId", "StatisticsModelGamemode");
-
-                            b1.ToTable("statistic");
-
-                            b1.WithOwner()
-                                .HasForeignKey("StatisticsModelUserId", "StatisticsModelGamemode");
-                        });
-
-                    b.Navigation("Grades");
-
-                    b.Navigation("Level");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("CringeLazer.Core.Models.UserModel", b =>
                 {
-                    b.OwnsOne("CringeLazer.Core.Models.Kudosu", "Kudosu", b1 =>
+                    b.OwnsOne("CringeLazer.Core.Models.KudosuModel", "Kudosu", b1 =>
                         {
                             b1.Property<long>("UserModelUserId")
                                 .HasColumnType("bigint");
@@ -346,8 +205,6 @@ namespace CringeLazer.Bancho.Migrations
             modelBuilder.Entity("CringeLazer.Core.Models.UserModel", b =>
                 {
                     b.Navigation("Sessions");
-
-                    b.Navigation("Statistics");
                 });
 #pragma warning restore 612, 618
         }

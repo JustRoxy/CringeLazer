@@ -1,4 +1,5 @@
 using CringeLazer.Core.Enums;
+using CringeLazer.Core.Models.Statistics;
 
 namespace CringeLazer.Core.Models;
 
@@ -6,6 +7,7 @@ public class UserModel
 {
     public long UserId { get; set; }
     public ICollection<SessionModel> Sessions { get; set; }
+    public ICollection<StatisticsModel> Statistics { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
     public string Email { get; set; }
@@ -38,4 +40,6 @@ public class UserModel
     public string Discord { get; set; }
     public string Website { get; set; }
     #endregion
+
+    public Kudosu Kudosu { get; set; }
 }

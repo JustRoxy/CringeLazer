@@ -1,6 +1,7 @@
 using CringeLazer.Application.Database;
 using CringeLazer.Core.Enums;
 using CringeLazer.Core.Models;
+using CringeLazer.Core.Models.Statistics;
 using CringeLazer.Core.Services;
 using LanguageExt.Common;
 
@@ -27,10 +28,24 @@ public class UserService : IUserService
             PreviousUsernames = new List<string>(),
             JoinDate = now,
             LastVisit = now,
-            IsActive = true
+            IsActive = true,
+            Kudosu = new Kudosu()
         };
 
         _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+
+        foreach (var gamemode in Enum.GetValues<Gamemode>())
+        {
+            _context.Statistics.Add(new StatisticsModel
+            {
+                UserId = user.UserId,
+                Gamemode = gamemode,
+                Level = new LevelInfo(),
+                Grades = new Grades()
+            });
+        }
+
         await _context.SaveChangesAsync();
 
         return user;

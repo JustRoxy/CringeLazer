@@ -1,5 +1,7 @@
+using System.Resources;
 using CringeLazer.Core.Enums;
 using CringeLazer.Core.Models;
+using CringeLazer.Core.Models.Statistics;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -10,11 +12,59 @@ public class CringeContext : DbContext
     static CringeContext()
     {
         NpgsqlConnection.GlobalTypeMapper.MapEnum<Countries>();
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<Gamemode>();
     }
+
     public CringeContext(DbContextOptions<CringeContext> options) : base(options) { }
 
+    public DbSet<StatisticsModel> Statistics { get; set; }
     public DbSet<UserModel> Users { get; set; }
     public DbSet<SessionModel> Sessions { get; set; }
+
+    private void MapStatistics(ModelBuilder modelBuilder)
+    {
+        modelBuilder.HasPostgresEnum<Gamemode>();
+        var s = modelBuilder.Entity<StatisticsModel>()
+            .ToTable("statistic");
+
+        s.HasOne(x => x.User)
+            .WithMany(x => x.Statistics)
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        s.OwnsOne(x => x.Level, x =>
+        {
+            x.Property(z => z.Current).IsRequired().HasColumnName("level_current");
+            x.Property(z => z.Progress).IsRequired().HasColumnName("level_progress");
+        });
+
+        s.OwnsOne(x => x.Grades, x =>
+        {
+            x.Property(z => z.A).IsRequired().HasColumnName("grades_a");
+            x.Property(z => z.S).IsRequired().HasColumnName("grades_s");
+            x.Property(z => z.SPlus).IsRequired().HasColumnName("grades_splus");
+            x.Property(z => z.SS).IsRequired().HasColumnName("grades_ss");
+            x.Property(z => z.SSPlus).IsRequired().HasColumnName("grades_ssplus");
+        });
+
+        s.HasKey(x => new { x.UserId, x.Gamemode });
+
+        s.Property(x => x.UserId).IsRequired().HasColumnName("user_id");
+        s.Property(x => x.Gamemode).IsRequired().HasColumnName("gamemode");
+        s.Property(x => x.IsRanked).IsRequired().HasColumnName("is_ranked");
+        s.Property(x => x.GlobalRank).HasColumnName("global_rank");
+        s.Property(x => x.CountryRank).HasColumnName("country_rank");
+        s.Property(x => x.PP).HasColumnName("pp");
+        s.Property(x => x.RankedScore).IsRequired().HasColumnName("ranked_score");
+        s.Property(x => x.Accuracy).IsRequired().HasColumnName("accuracy");
+        s.Property(x => x.PlayCount).IsRequired().HasColumnName("playcount");
+        s.Property(x => x.PlayTime).HasColumnName("playtime");
+        s.Property(x => x.TotalScore).IsRequired().HasColumnName("total_score");
+        s.Property(x => x.TotalHits).IsRequired().HasColumnName("total_hits");
+        s.Property(x => x.MaxCombo).IsRequired().HasColumnName("max_combo");
+        s.Property(x => x.ReplaysWatched).IsRequired().HasColumnName("replays_watched");
+        s.Property(x => x.RankHistory).HasColumnName("rank_history");
+    }
 
     private void MapSessions(ModelBuilder modelBuilder)
     {
@@ -34,6 +84,7 @@ public class CringeContext : DbContext
         session.Property(x => x.RefreshToken).IsRequired().HasColumnName("refresh_token");
         session.Property(x => x.UserId).IsRequired().HasColumnName("user_id");
     }
+
     private void MapUserModel(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresEnum<Countries>();
@@ -45,6 +96,16 @@ public class CringeContext : DbContext
         user.HasMany(x => x.Sessions)
             .WithOne(x => x.User)
             .OnDelete(DeleteBehavior.Cascade);
+
+        user.HasMany(x => x.Statistics)
+            .WithOne(x => x.User)
+            .HasForeignKey(x => x.UserId);
+
+        user.OwnsOne(x => x.Kudosu, builder =>
+        {
+            builder.Property(x => x.Available).HasColumnName("kudosu_available");
+            builder.Property(x => x.Total).HasColumnName("kudosu_total");
+        });
 
         user.Property(x => x.UserId).UseIdentityColumn().IsRequired().HasColumnName("user_id");
         user.Property(x => x.Username).IsRequired().HasColumnName("username");
@@ -79,5 +140,6 @@ public class CringeContext : DbContext
     {
         MapUserModel(modelBuilder);
         MapSessions(modelBuilder);
+        MapStatistics(modelBuilder);
     }
 }
