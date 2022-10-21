@@ -4,6 +4,7 @@ using CringeLazer.Core.Services;
 using CringeLazer.Core.Settings;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,12 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<CringeContext>();
     context.Database.Migrate();
+
+    using (var conn = (NpgsqlConnection)context.Database.GetDbConnection())
+    {
+        conn.Open();
+        conn.ReloadTypes();
+    }
 }
 
 // Configure the HTTP request pipeline.

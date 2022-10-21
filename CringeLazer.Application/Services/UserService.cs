@@ -1,4 +1,5 @@
 using CringeLazer.Application.Database;
+using CringeLazer.Core.Enums;
 using CringeLazer.Core.Models;
 using CringeLazer.Core.Services;
 using LanguageExt.Common;
@@ -16,11 +17,17 @@ public class UserService : IUserService
 
     public async Task<Result<UserModel>> Create(string username, string email, string password)
     {
+        var now = DateTime.UtcNow;
         var user = new UserModel
         {
             Username = username,
             Password = BCrypt.Net.BCrypt.EnhancedHashPassword(password),
-            Email = email
+            Email = email,
+            Country = Countries.BR,
+            PreviousUsernames = new List<string>(),
+            JoinDate = now,
+            LastVisit = now,
+            IsActive = true
         };
 
         _context.Users.Add(user);

@@ -32,7 +32,6 @@ public class AuthorizationService : IAuthorizationService
             Password = x.Password,
             Username = username,
             UserId = x.UserId,
-            RefreshToken = x.RefreshToken
         }).FirstOrDefaultAsync(x => x.Username == username);
 
         if (user is null)
@@ -42,7 +41,13 @@ public class AuthorizationService : IAuthorizationService
             return new Result<OAuthToken>(new StatusCodeException("Incorrect username or password", 401));
 
         var tokens = GenerateToken(user.UserId);
-        user.RefreshToken = tokens.RefreshToken;
+        var session = new SessionModel
+        {
+            RefreshToken = tokens.RefreshToken,
+            UserId = user.UserId
+        };
+        _context.Sessions.Add(session);
+
         await _context.SaveChangesAsync();
 
         return tokens;
@@ -50,14 +55,13 @@ public class AuthorizationService : IAuthorizationService
 
     public async Task<Result<OAuthToken>> Refresh(string token)
     {
-        var user = await _context.Users.Where(x => x.RefreshToken == token)
-            .Select(x => new UserModel { UserId = x.UserId }).FirstOrDefaultAsync();
+        var session = await _context.Sessions.FirstOrDefaultAsync(x => x.RefreshToken == token);
+        if (session is null)
+            return new Result<OAuthToken>(new StatusCodeException("Session with this refresh-token is not found", 404));
 
-        if (user is null)
-            return new Result<OAuthToken>(new StatusCodeException("User with this refresh-token is not found", 404));
+        var tokens = GenerateToken(session.UserId);
+        session.RefreshToken = tokens.RefreshToken;
 
-        var tokens = GenerateToken(user.UserId);
-        user.RefreshToken = tokens.RefreshToken;
         await _context.SaveChangesAsync();
 
         return tokens;
