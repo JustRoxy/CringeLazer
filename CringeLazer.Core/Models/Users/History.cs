@@ -8,7 +8,7 @@ namespace CringeLazer.Core.Models.Users;
 /// </summary>
 public class History
 {
-    [JsonPropertyName("date")]
+    [JsonPropertyName("start_date")]
     [JsonConverter(typeof(DateOnlyJsonConverter))]
     public DateOnly Date { get; set; }
 

@@ -6,8 +6,8 @@ namespace CringeLazer.Core.Models.Users;
 public class UserModel
 {
     public long UserId { get; set; }
-    public ICollection<SessionModel> Sessions { get; set; }
-    public ICollection<StatisticsModel> Statistics { get; set; }
+    public IList<SessionModel> Sessions { get; set; }
+    public IList<StatisticsModel> Statistics { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
     public string Email { get; set; }

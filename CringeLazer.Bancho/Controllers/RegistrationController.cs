@@ -28,7 +28,9 @@ public class RegistrationController : ControllerBase
         {
             var result = await _userService.Create(request.Username, request.Email, request.Password);
 
-            return result.ToResult();
+            result
+                .Drop()
+                .ToResult();
         }
 
         return BadRequest(new RegistrationErrorResponse

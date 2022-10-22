@@ -1,10 +1,10 @@
 using CringeLazer.Application.Database;
 using CringeLazer.Core.Enums;
-using CringeLazer.Core.Models;
 using CringeLazer.Core.Models.Statistics;
 using CringeLazer.Core.Models.Users;
 using CringeLazer.Core.Services;
 using LanguageExt.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace CringeLazer.Application.Services;
 
@@ -31,6 +31,8 @@ public class UserService : IUserService
             LastVisit = now,
             IsActive = true,
             Kudosu = new Kudosu(),
+            Badges = new List<Badge>(),
+            Achievements = new List<Achievement>(),
             MonthlyPlayCounts = new List<History>(),
             ReplaysWatchedCounts = new List<History>()
         };
@@ -52,5 +54,15 @@ public class UserService : IUserService
         await _context.SaveChangesAsync();
 
         return user;
+    }
+
+    public Task<T> GetOne<T>(Func<IQueryable<UserModel>, IQueryable<T>> map)
+    {
+        return map(_context.Users).FirstOrDefaultAsync();
+    }
+
+    public Task<List<T>> GetMany<T>(Func<IQueryable<UserModel>, IQueryable<T>> map)
+    {
+        return map(_context.Users).ToListAsync();
     }
 }

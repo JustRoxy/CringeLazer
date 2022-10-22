@@ -1,8 +1,10 @@
+using System.Reflection;
 using CringeLazer.Application.Database;
 using CringeLazer.Application.Services;
 using CringeLazer.Core.Services;
 using CringeLazer.Core.Settings;
 using FluentValidation;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -20,7 +22,7 @@ builder.Services.AddDbContext<CringeContext>(
     o => o.UseNpgsql(connectionString,
         op => op.MigrationsAssembly(typeof(Program).Assembly.FullName)));
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));
-
+TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetExecutingAssembly());
 builder.Services.AddTransient<IAuthorizationService, AuthorizationService>();
 builder.Services.AddTransient<IUserService, UserService>();
 

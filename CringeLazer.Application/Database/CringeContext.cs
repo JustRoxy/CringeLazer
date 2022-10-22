@@ -97,10 +97,6 @@ public class CringeContext : DbContext
             .WithOne(x => x.User)
             .OnDelete(DeleteBehavior.Cascade);
 
-        user.HasMany(x => x.Statistics)
-            .WithOne(x => x.User)
-            .HasForeignKey(x => x.UserId);
-
         user.OwnsOne(x => x.Kudosu, builder =>
         {
             builder.Property(x => x.Available).HasColumnName("kudosu_available");
