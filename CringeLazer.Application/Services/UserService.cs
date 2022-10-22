@@ -34,7 +34,20 @@ public class UserService : IUserService
             Badges = new List<Badge>(),
             Achievements = new List<Achievement>(),
             MonthlyPlayCounts = new List<History>(),
-            ReplaysWatchedCounts = new List<History>()
+            ReplaysWatchedCounts = new List<History>(),
+            AvatarUrl = "https://www.hdwallpaper.nu/wp-content/uploads/2015/02/funny_cat_face_pictures.jpg",
+            Playmode = Gamemode.Osu,
+            ProfileOrder = new List<ProfilePage>
+            {
+                ProfilePage.Me,
+                ProfilePage.RecentActivity,
+                ProfilePage.Beatmaps,
+                ProfilePage.Historical,
+                ProfilePage.Kudosu,
+                ProfilePage.TopRanks,
+                ProfilePage.Medals
+            },
+            Colour = "#ffff"
         };
 
         _context.Users.Add(user);

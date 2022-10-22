@@ -1,3 +1,4 @@
+using CringeLazer.Core.Enums;
 using CringeLazer.Core.Models.Users;
 using Newtonsoft.Json;
 
@@ -21,31 +22,30 @@ public class UserResponse
     public CountryResponse Country { get; set; }
 
     [JsonProperty(@"profile_colour")]
-    public string Colour;
+    public string Colour { get; set; }
 
     [JsonProperty(@"avatar_url")]
-    public string AvatarUrl;
+    public string AvatarUrl { get; set; }
 
     [JsonProperty(@"cover_url")]
-    public string CoverUrl
-    {
-        get => Cover?.Url;
-        set => Cover = new UserCover { Url = value };
-    }
+    public string CoverUrl { get; set; }
 
     [JsonProperty(@"cover")]
-    public UserCover Cover { get; set; }
+    public UserCover Cover => new()
+    {
+        Url = CoverUrl
+    };
 
     public class UserCover
     {
         [JsonProperty(@"custom_url")]
-        public string CustomUrl;
+        public string CustomUrl { get; set; }
 
         [JsonProperty(@"url")]
-        public string Url;
+        public string Url { get; set; }
 
         [JsonProperty(@"id")]
-        public int? Id;
+        public int? Id { get; set; }
     }
 
     [JsonProperty(@"is_admin")]
@@ -148,13 +148,13 @@ public class UserResponse
     public int BeatmapPlayCountsCount { get; set; }
 
     [JsonProperty(@"playstyle")]
-    public List<string> PlayStyle { get; set; }
+    public List<Playstyles> PlayStyle { get; set; }
 
     [JsonProperty(@"playmode")]
-    public string PlayMode { get; set; }
+    public Gamemode PlayMode { get; set; }
 
     [JsonProperty(@"profile_order")]
-    public string[] ProfileOrder { get; set; }
+    public List<ProfilePage> ProfileOrder { get; set; }
 
     [JsonProperty(@"kudosu")]
     public KudosuCount Kudosu { get; set; }
@@ -172,7 +172,22 @@ public class UserResponse
     public StatisticsResponse Statistics { get; set; }
 
     [JsonProperty(@"rank_history")]
-    public Dictionary<string, List<int>> RankHistory { get; set; }
+    public RankHistoryResponse RankHistory
+    {
+        get
+        {
+            if (Statistics is not null)
+            {
+                return new RankHistoryResponse
+                {
+                    Data = Statistics.RankHistory,
+                    Mode = Statistics.Gamemode
+                };
+            }
+
+            return null;
+        }
+    }
 
     [JsonProperty("badges")]
     public HashSet<BadgeResponse> Badges { get; set; }
@@ -211,5 +226,14 @@ public class UserResponse
     {
         [JsonProperty(@"code")]
         public string Code { get; set; }
+    }
+
+    public class RankHistoryResponse
+    {
+        [JsonProperty("mode")]
+        public Gamemode Mode { get; set; }
+
+        [JsonProperty("data")]
+        public List<int> Data { get; set; }
     }
 }

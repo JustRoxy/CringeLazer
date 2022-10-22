@@ -1,9 +1,11 @@
+using CringeLazer.Core.Enums;
 using Newtonsoft.Json;
 
 namespace CringeLazer.Bancho.Contracts.Responses;
 
 public class StatisticsResponse
 {
+    public Gamemode Gamemode { get; set; }
     [JsonProperty(@"level")]
     public LevelInfo Level { get; set; }
 

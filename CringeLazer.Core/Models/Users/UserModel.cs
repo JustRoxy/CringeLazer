@@ -28,9 +28,16 @@ public class UserModel
     #region Status
     public bool IsActive { get; set; }
     public DateTime LastVisit { get; set; }
+    public List<History> MonthlyPlayCounts { get; set; }
+    public List<History> ReplaysWatchedCounts { get; set; }
     #endregion
 
     #region Settings
+    public string AvatarUrl { get; set; }
+    public string CoverUrl { get; set; }
+    public List<Playstyles> Playstyle  { get; set; }
+    public Gamemode Playmode { get; set; }
+    public List<ProfilePage> ProfileOrder { get; set; }
     public bool PMFriendsOnly {get;set;}
     public string Interests { get; set; }
     public string Occupation { get; set; }
@@ -41,11 +48,11 @@ public class UserModel
     public string Website { get; set; }
     #endregion
 
+    #region Internal
+    public string Colour { get; set; }
     public Kudosu Kudosu { get; set; }
     public ICollection<Badge> Badges { get; set; }
 
     public ICollection<Achievement> Achievements { get; set; }
-    public List<History> MonthlyPlayCounts { get; set; }
-    public List<History> ReplaysWatchedCounts { get; set; }
-
+    #endregion
 }

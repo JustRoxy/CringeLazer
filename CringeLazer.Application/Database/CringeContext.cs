@@ -13,6 +13,8 @@ public class CringeContext : DbContext
     {
         NpgsqlConnection.GlobalTypeMapper.MapEnum<Countries>();
         NpgsqlConnection.GlobalTypeMapper.MapEnum<Gamemode>();
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<Playstyles>();
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<ProfilePage>();
     }
 
     public CringeContext(DbContextOptions<CringeContext> options) : base(options) { }
@@ -88,6 +90,8 @@ public class CringeContext : DbContext
     private void MapUserModel(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresEnum<Countries>();
+        modelBuilder.HasPostgresEnum<Playstyles>();
+        modelBuilder.HasPostgresEnum<ProfilePage>();
 
         var user = modelBuilder.Entity<UserModel>();
         user.ToTable("user")
@@ -148,6 +152,11 @@ public class CringeContext : DbContext
         user.Property(x => x.IsActive).IsRequired().HasColumnName("is_active");
         user.Property(x => x.LastVisit).IsRequired().HasColumnName("last_visit");
 
+        user.Property(x => x.AvatarUrl).IsRequired().HasColumnName("avatar_url");
+        user.Property(x => x.CoverUrl).HasColumnName("cover_url");
+        user.Property(x => x.Playstyle).HasColumnName("playstyle");
+        user.Property(x => x.Playmode).IsRequired().HasColumnName("playmode");
+        user.Property(x => x.ProfileOrder).HasColumnName("profile_order");
         user.Property(x => x.PMFriendsOnly).IsRequired().HasColumnName("pm_friends_only");
         user.Property(x => x.Interests).HasColumnName("interests");
         user.Property(x => x.Occupation).HasColumnName("occupation");
@@ -157,6 +166,7 @@ public class CringeContext : DbContext
         user.Property(x => x.Discord).HasColumnName("discord");
         user.Property(x => x.Website).HasColumnName("website");
 
+        user.Property(x => x.Colour).IsRequired().HasColumnName("colour");
         user.Property(x => x.MonthlyPlayCounts).IsRequired().HasColumnType("jsonb").HasColumnName("monthly_playcounts");
         user.Property(x => x.ReplaysWatchedCounts).IsRequired().HasColumnType("jsonb").HasColumnName("replays_watched");
     }

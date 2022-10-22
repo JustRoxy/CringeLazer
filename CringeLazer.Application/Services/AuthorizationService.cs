@@ -75,7 +75,7 @@ public class AuthorizationService : IAuthorizationService
         var expires = now.AddDays(5);
         var creds = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.AuthorizationKey)),
             "HS256");
-        var accessToken = handler.CreateEncodedJwt("CringeLazer", "osu", new ClaimsIdentity(new[]
+        var accessToken = handler.CreateEncodedJwt("cringelazer", "osu", new ClaimsIdentity(new[]
         {
             new Claim(ClaimTypes.Name, userId.ToString()),
             new Claim(ClaimTypes.NameIdentifier, userId.ToString())
