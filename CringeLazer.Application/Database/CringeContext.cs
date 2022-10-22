@@ -1,4 +1,3 @@
-using System.Resources;
 using CringeLazer.Core.Enums;
 using CringeLazer.Core.Models;
 using CringeLazer.Core.Models.Statistics;
@@ -161,6 +160,9 @@ public class CringeContext : DbContext
         user.Property(x => x.Twitter).HasColumnName("twitter");
         user.Property(x => x.Discord).HasColumnName("discord");
         user.Property(x => x.Website).HasColumnName("website");
+
+        user.Property(x => x.MonthlyPlayCounts).IsRequired().HasColumnType("jsonb").HasColumnName("monthly_playcounts");
+        user.Property(x => x.ReplaysWatchedCounts).IsRequired().HasColumnType("jsonb").HasColumnName("replays_watched");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

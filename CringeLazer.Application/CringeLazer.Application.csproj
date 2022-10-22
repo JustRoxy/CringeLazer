@@ -7,21 +7,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3"/>
-        <PackageReference Include="Dapper" Version="2.0.123"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10"/>
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+        <PackageReference Include="Dapper" Version="2.0.123" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.10">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Npgsql" Version="6.0.7"/>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7"/>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0"/>
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.24.0"/>
+        <PackageReference Include="Npgsql" Version="6.0.7" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.24.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\CringeLazer.Core\CringeLazer.Core.csproj"/>
+        <ProjectReference Include="..\CringeLazer.Core\CringeLazer.Core.csproj" />
     </ItemGroup>
 
 </Project>

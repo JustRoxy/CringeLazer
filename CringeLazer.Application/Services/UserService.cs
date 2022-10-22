@@ -30,7 +30,9 @@ public class UserService : IUserService
             JoinDate = now,
             LastVisit = now,
             IsActive = true,
-            Kudosu = new Kudosu()
+            Kudosu = new Kudosu(),
+            MonthlyPlayCounts = new List<History>(),
+            ReplaysWatchedCounts = new List<History>()
         };
 
         _context.Users.Add(user);

@@ -45,5 +45,7 @@ public class UserModel
     public ICollection<Badge> Badges { get; set; }
 
     public ICollection<Achievement> Achievements { get; set; }
+    public List<History> MonthlyPlayCounts { get; set; }
+    public List<History> ReplaysWatchedCounts { get; set; }
 
 }
