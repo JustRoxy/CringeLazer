@@ -1,5 +1,6 @@
 using CringeLazer.Application.Database;
 using CringeLazer.Core.Enums;
+using CringeLazer.Core.Exceptions;
 using CringeLazer.Core.Models.Statistics;
 using CringeLazer.Core.Models.Users;
 using CringeLazer.Core.Services;
@@ -69,9 +70,15 @@ public class UserService : IUserService
         return user;
     }
 
-    public Task<T> GetOne<T>(Func<IQueryable<UserModel>, IQueryable<T>> map)
+    public async Task<Result<T>> GetOne<T>(Func<IQueryable<UserModel>, IQueryable<T>> map)
     {
-        return map(_context.Users).FirstOrDefaultAsync();
+        var result = await map(_context.Users).FirstOrDefaultAsync();
+        if (result is null)
+        {
+            return new Result<T>(new StatusCodeException("User not found", 404));
+        }
+
+        return result;
     }
 
     public Task<List<T>> GetMany<T>(Func<IQueryable<UserModel>, IQueryable<T>> map)

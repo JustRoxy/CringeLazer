@@ -28,12 +28,12 @@ public class AuthorizationService : IAuthorizationService
 
     public async Task<Result<OAuthToken>> Access(string username, string password)
     {
-        var user = await _context.Users.Select(x => new UserModel
+        var user = await _context.Users.Where(x => x.Username == username).Select(x => new UserModel
         {
             Password = x.Password,
             Username = username,
-            UserId = x.UserId,
-        }).FirstOrDefaultAsync(x => x.Username == username);
+            UserId = x.UserId
+        }).FirstOrDefaultAsync();
 
         if (user is null)
             return new Result<OAuthToken>(new StatusCodeException("User not found", 404));

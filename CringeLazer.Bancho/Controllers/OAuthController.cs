@@ -19,8 +19,8 @@ public class OAuthController : ControllerBase
         _authorization = authorization;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Login(OAuthLoginRequest request)
+    [HttpPost("token")]
+    public async Task<IActionResult> Login([FromForm] OAuthLoginRequest request)
     {
         var result = request.GrantType switch
         {

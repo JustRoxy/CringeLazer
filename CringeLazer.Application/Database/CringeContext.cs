@@ -22,7 +22,28 @@ public class CringeContext : DbContext
     public DbSet<StatisticsModel> Statistics { get; set; }
     public DbSet<UserModel> Users { get; set; }
     public DbSet<SessionModel> Sessions { get; set; }
+    public DbSet<FriendsModel> Friends { get; set; }
 
+    private void MapFriends(ModelBuilder modelBuilder)
+    {
+        var f = modelBuilder.Entity<FriendsModel>()
+            .ToTable("friend");
+
+        f.HasKey(x => new { x.IssuerId, x.ReceiverId });
+
+        f.HasOne(x => x.Issuer)
+            .WithMany(x => x.Friends)
+            .HasForeignKey(x => x.IssuerId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        f.HasOne(x => x.Receiver)
+            .WithMany()
+            .HasForeignKey(x => x.ReceiverId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        f.Property(x => x.IssuerId).IsRequired().HasColumnName("issuer_id");
+        f.Property(x => x.ReceiverId).IsRequired().HasColumnName("receiver_id");
+    }
     private void MapStatistics(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresEnum<Gamemode>();
@@ -176,5 +197,6 @@ public class CringeContext : DbContext
         MapUserModel(modelBuilder);
         MapSessions(modelBuilder);
         MapStatistics(modelBuilder);
+        MapFriends(modelBuilder);
     }
 }

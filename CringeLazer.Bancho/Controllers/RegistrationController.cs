@@ -21,14 +21,14 @@ public class RegistrationController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register(RegistrationRequest request)
+    public async Task<IActionResult> Register([FromForm] RegistrationRequest request)
     {
         var validationResult = await _registrationValidator.ValidateAsync(request);
         if (validationResult.IsValid)
         {
             var result = await _userService.Create(request.Username, request.Email, request.Password);
 
-            result
+            return result
                 .Drop()
                 .ToResult();
         }
