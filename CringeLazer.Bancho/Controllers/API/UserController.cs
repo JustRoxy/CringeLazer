@@ -22,7 +22,13 @@ public class UserController
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetUser(string id, [FromQuery] string key)
+    public Task<IActionResult> GetUser(string id, [FromQuery] string key)
+    {
+        return GetUserGamemode(id, Gamemode.Osu, key);
+    }
+
+    [HttpGet("{id}/{gamemode}")]
+    public async Task<IActionResult> GetUserGamemode(string id, Gamemode gamemode, [FromQuery] string key)
     {
         long.TryParse(id, out var lId);
         Expression<Func<UserModel, bool>> selector = key switch
@@ -32,7 +38,7 @@ public class UserController
         };
 
         var result = await _users.GetOne(user => user.AsNoTracking()
-            .Include(x => x.Statistics.Where(z => z.Gamemode == Gamemode.Osu))
+            .Include(x => x.Statistics.Where(z => z.Gamemode == gamemode))
             .Where(selector)
             .ProjectToType<UserResponse>());
 
