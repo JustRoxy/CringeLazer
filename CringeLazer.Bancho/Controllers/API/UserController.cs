@@ -14,10 +14,12 @@ namespace CringeLazer.Bancho.Controllers.API;
 [Route("api/v2/users")]
 public class UserController
 {
+    private readonly IOnlineUsers _online;
     private readonly IUserService _users;
 
-    public UserController(IUserService users)
+    public UserController(IOnlineUsers online, IUserService users)
     {
+        _online = online;
         _users = users;
     }
 
@@ -41,6 +43,12 @@ public class UserController
             .Include(x => x.Statistics.Where(z => z.Gamemode == gamemode))
             .Where(selector)
             .ProjectToType<UserResponse>());
+
+        result = await result.MapAsync(async x =>
+        {
+            x.IsOnline = await _online.IsOnline(id);
+            return x;
+        });
 
         return result.ToResult();
     }

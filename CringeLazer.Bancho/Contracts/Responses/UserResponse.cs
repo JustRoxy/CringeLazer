@@ -21,6 +21,9 @@ public class UserResponse
     [JsonProperty(@"country")]
     public CountryResponse Country { get; set; }
 
+    [JsonProperty("country_code")]
+    public string CountryCode => Country.Code;
+
     [JsonProperty(@"profile_colour")]
     public string Colour { get; set; }
 
@@ -72,8 +75,15 @@ public class UserResponse
     [JsonProperty(@"is_active")]
     public bool IsActive { get; set; }
 
+    [JsonIgnore]
+    private bool force_online;
+
     [JsonProperty(@"is_online")]
-    public bool IsOnline => DateTime.UtcNow - LastVisit < TimeSpan.FromMinutes(5);
+    public bool IsOnline
+    {
+        get => force_online || DateTime.UtcNow - LastVisit < TimeSpan.FromMinutes(5);
+        set => force_online = value;
+    }
 
     [JsonProperty(@"pm_friends_only")]
     public bool PMFriendsOnly { get; set; }

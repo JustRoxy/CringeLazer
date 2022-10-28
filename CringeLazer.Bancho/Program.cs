@@ -2,6 +2,8 @@ using System.Reflection;
 using System.Text;
 using CringeLazer.Application.Database;
 using CringeLazer.Application.Services;
+using CringeLazer.Bancho.Hubs;
+using CringeLazer.Bancho.Middlewares;
 using CringeLazer.Core.Services;
 using CringeLazer.Core.Settings;
 using FluentValidation;
@@ -48,6 +50,8 @@ builder.Services.AddControllers().AddNewtonsoftJson(o =>
         }
     };
 });
+
+builder.Services.AddSignalR().AddMessagePackProtocol();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -83,6 +87,9 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 }).AddSwaggerGenNewtonsoftSupport();
+
+builder.Services.AddTransient<OnlineMiddleware>();
+
 var connectionString = builder.Configuration.GetConnectionString("Database");
 builder.Services.Configure<Settings>(builder.Configuration.GetSection("Settings"));
 builder.Services.AddDbContext<CringeContext>(
@@ -92,6 +99,9 @@ builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));
 TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetExecutingAssembly());
 builder.Services.AddTransient<IAuthorizationService, AuthorizationService>();
 builder.Services.AddTransient<IUserService, UserService>();
+
+builder.Services.AddMemoryCache();
+builder.Services.AddTransient<IOnlineUsers, OnlineUsers>();
 
 var app = builder.Build();
 
@@ -118,6 +128,12 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<OnlineMiddleware>();
+
+app.MapHub<SpectatorHub>("/spectator");
+app.MapHub<MultiplayerHub>("/multiplayer");
+app.MapHub<MetadataHub>("/metadata");
 
 app.MapControllers();
 
