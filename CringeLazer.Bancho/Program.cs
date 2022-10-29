@@ -3,6 +3,7 @@ using System.Text;
 using CringeLazer.Application.Database;
 using CringeLazer.Application.Services;
 using CringeLazer.Bancho.Hubs;
+using CringeLazer.Bancho.Hubs.Multiplayer;
 using CringeLazer.Bancho.Middlewares;
 using CringeLazer.Core.Services;
 using CringeLazer.Core.Settings;

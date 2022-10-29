@@ -1,8 +1,10 @@
 using CringeLazer.Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace CringeLazer.Bancho.Hubs;
 
+[Authorize]
 public class MetadataHub : Hub
 {
     private readonly IOnlineUsers _online;

@@ -28,8 +28,4 @@
         <ProjectReference Include="..\CringeLazer.Application\CringeLazer.Application.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Hubs\Contracts" />
-    </ItemGroup>
-
 </Project>
